@@ -1,0 +1,47 @@
+.navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: space-around; 
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    
+  }
+  
+  .navbar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    padding: 0 20px; 
+    transition: background-color 0.2s ease; 
+  }
+  
+  .navbar a:hover {
+    background-color: rgba(255, 140, 0, 0.1); 
+  }
+  
+  .navbar a.active {
+    color: #ff8c00; 
+  }
+  
+  .navbar img {
+    width: 24px; 
+    height: 24px; 
+    margin-bottom: 5px;
+  }
+  @media (min-width: 768px) { /* Применяем стили для экранов от 768px и больше */
+   
+    .navbar a {
+      padding: 0 45px; /* Увеличиваем отступы в меню */
+    }
+  
+    .navbar img {
+      width: 45px; /* Увеличиваем иконки в меню */
+      height: 45px;
+    }
+  }

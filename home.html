@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoxSwap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" type="text/css" href="home.css">
+  <link rel="stylesheet" type="text/css" href="navbar.css">
+  <link rel="stylesheet" type="text/css" href="fox.css">
+</head>
+<body>
+  <header>
+    <div class="language-switch">
+      <img src="icn\rus.png" alt="Русский" data-lang="ru" class="language-flag active">   
+      <img src="icn\usa.png" alt="English" data-lang="en" class="language-flag">
+      
+    </div>
+  </header>
+  <div class="theme-toggle" id="theme-toggle">
+    <img src="icn/light.png" alt="Светлая тема" class="theme-icon light-theme-icon">
+    <img src="icn/dark.png" alt="Темная тема" class="theme-icon dark-theme-icon">
+  </div>
+  <div class="container">
+    <h1 id="main-title" data-translate="main-title">Тапай и зарабатывай!</h1>
+    
+    <div class="image-container">
+      <img id="clickable-image" src="img/foxic.png" alt="Clickable Image">
+      <div class="particles-container"></div> </div>
+      <div class="particles-container"></div> 
+    
+    <div class="balance">
+      <span id="coin-balance">0</span>
+      <img src="icn\golden.png" alt="Coin Icon">
+    </div>
+  </div>
+
+
+    <nav class="navbar">
+      <a href="home.html" class="active">
+        <img src="icn/home.png" alt="Home Icon">
+        <span id="home-link" data-translate="home-link">Home</span>
+      </a>
+      <a href="tasks.html">
+        <img src="icn/quest.png" alt="Tasks Icon">
+        <span id="tasks-link" data-translate="tasks-link">Tasks</span>
+      </a>
+      <a href="referals.html">
+        <img src="icn/friends.png" alt="Friends Icon">
+        <span id="friends-link" data-translate="friends-link">Friends</span>
+      </a>
+    </nav>
+ 
+
+  <script src="language.js"></script>
+  <script src="home.js"></script>
+  <script src="fox.js"></script>
+</body>
+</html>
