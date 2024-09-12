@@ -10,67 +10,77 @@
   <link rel="stylesheet" type="text/css" href="fox.css">
 </head>
 <body>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <header>
     <div class="language-switch">
       <img src="icn\rus.png" alt="Русский" data-lang="ru" class="language-flag active">   
       <img src="icn\usa.png" alt="English" data-lang="en" class="language-flag">
-      
+
+    </div>
+    <div class="theme-toggle" id="theme-toggle">
+      <img src="icn/light.png" alt="Светлая тема" class="theme-icon light-theme-icon">
+      <img src="icn/dark.png" alt="Темная тема" class="theme-icon dark-theme-icon">
     </div>
   </header>
-  <div class="theme-toggle" id="theme-toggle">
-    <img src="icn/light.png" alt="Светлая тема" class="theme-icon light-theme-icon">
-    <img src="icn/dark.png" alt="Темная тема" class="theme-icon dark-theme-icon">
-  </div>
+
   <div class="container">
     <h1 id="main-title" data-translate="main-title">Тапай и зарабатывай!</h1>
-    
+
     <div class="image-container">
       <img id="clickable-image" src="img/foxic.png" alt="Clickable Image">
-      <div class="particles-container"></div> </div>
       <div class="particles-container"></div> 
-    
+    </div> 
+
     <div class="balance">
       <span id="coin-balance">0</span>
       <img src="icn\golden.png" alt="Coin Icon">
     </div>
   </div>
 
+  <nav class="navbar">
+    <a href="index.html" class="active">
+      <img src="icn/home.png" alt="Home Icon">
+      <span id="home-link" data-translate="home-link">Home</span>
+    </a>
+    <a href="tasks.html">
+      <img src="icn/quest.png" alt="Tasks Icon">
+      <span id="tasks-link" data-translate="tasks-link">Tasks</span>
+    </a>
+    <a href="referals.html">
+      <img src="icn/friends.png" alt="Friends Icon">
+      <span id="friends-link" data-translate="friends-link">Friends</span>
+    </a>
+  </nav>
 
-    <nav class="navbar">
-      <a href="home.html" class="active">
-        <img src="icn/home.png" alt="Home Icon">
-        <span id="home-link" data-translate="home-link">Home</span>
-      </a>
-      <a href="tasks.html">
-        <img src="icn/quest.png" alt="Tasks Icon">
-        <span id="tasks-link" data-translate="tasks-link">Tasks</span>
-      </a>
-      <a href="referals.html">
-        <img src="icn/friends.png" alt="Friends Icon">
-        <span id="friends-link" data-translate="friends-link">Friends</span>
-      </a>
-    </nav>
- 
-   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script>
-      // TODO: Replace the following with your app's Firebase project configuration
-      const firebaseConfig = {
-apiKey: "AIzaSyBQh47_6mN23DZ37YzQAplAmvZ9I3tnIdM",
-authDomain: "foxswap1-c32af.firebaseapp.com",
-projectId: "foxswap1-c32af",
-storageBucket: "foxswap1-c32af.appspot.com",
-messagingSenderId: "402106129665",
-appId: "1:402106129665:web:b9a63193ca6e2001078f00"
-};
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase_config.js"></script>
 
-      // Initialize Firebase
-      const app = firebase.initializeApp(firebaseConfig);
-      const db = firebase.firestore(app);
-    </script>
-    
   <script src="language.js"></script>
   <script src="home.js"></script>
   <script src="fox.js"></script>
   <script src="database.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      getTelegramUserId(); 
+    });
+
+    // ... (код для обработки клика по картинке из файла fox.js) ...
+
+    const clickableImage = document.getElementById('clickable-image');
+    let coinBalance = 0; 
+
+    clickableImage.addEventListener('click', () => {
+        coinBalance++;
+        document.getElementById('coin-balance').textContent = coinBalance;
+
+        const userId = window.Telegram.WebApp.initData.user?.id;
+        if (userId) {
+            addUserToFirestore(userId); 
+        } 
+    });
+
+  </script>
+</body>
 </html>
