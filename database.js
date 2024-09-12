@@ -1,62 +1,69 @@
+import { db } from './firebase_config.js';
 
- async function getTelegramUserId() {
-    return new Promise((resolve, reject) => {
-      if (window.Telegram && window.Telegram.WebApp) {
-        const userId = window.Telegram.WebApp.initDataUnsafe.user?.id;
-        if (userId) {
-          resolve(userId.toString()); // Возвращаем ID как строку
-        } else {
-          reject(new Error("Telegram user ID not found."));
-        }
+document.addEventListener('DOMContentLoaded', () => {
+  console.log("DOMContentLoaded: Событие сработало.");
+  getTelegramUserId()
+    .then(userId => {
+      console.log("getTelegramUserId: Telegram ID получен:", userId);
+      if (userId) {
+        addUserToFirestore(userId);
       } else {
-        reject(new Error("Telegram API not available."));
+        console.error('getTelegramUserId: Не удалось получить Telegram ID.');
+        // Дополнительная обработка ошибки, если нужно
+        // Например, показать пользователю сообщение об ошибке
+        alert("Произошла ошибка. Пожалуйста, попробуйте позже.");
       }
+    })
+    .catch(error => {
+      console.error('getTelegramUserId: Ошибка при получении Telegram ID:', error);
+      // Обработка ошибки, если нужно
+      // Например, показать пользователю сообщение об ошибке
+      alert("Произошла ошибка. Пожалуйста, попробуйте позже.");
     });
-  }
-  async function checkAndCreateUser(userId) {
-    try {
-      const userRef = db.collection('users').doc(userId);
-      const userDoc = await userRef.get();
+});
 
-      if (!userDoc.exists) {
-        await userRef.set({
-          balance: 0,
-          progress: 0,
-          referralCode: null, // Сгенерируем позже
-          referrals: [] // Массив для хранения ID рефералов
-        });
-        console.log('Новый пользователь создан в Firebase:', userId);
-      } else {
-        console.log('Пользователь уже существует в Firebase:', userId);
-      }
-    } catch (error) {
-      console.error("Ошибка при проверке/создании пользователя:", error);
-      // Дополнительная обработка ошибки, например, показ сообщения пользователю
-    }
-  }   window.addEventListener('load', async () => {
-    try {
-      const telegramUserId = await getTelegramUserId(); 
-      console.log("Telegram User ID:", telegramUserId);
-
-      if (telegramUserId) {
-        await checkAndCreateUser(telegramUserId);
-        // ... дальнейшие действия, например, обновление интерфейса ...
-      } else {
-        // Обработка ошибки, если ID не получен
-        showError("Create a telegram id"); 
-      }
-    } catch (error) {
-      console.error("Ошибка при инициализации:", error);
-      // ... обработка ошибки ...
+async function getTelegramUserId() {
+  return new Promise((resolve, reject) => { 
+    console.log("getTelegramUserId: Начинаем получение Telegram ID...");
+    if (window.Telegram.WebApp) {
+      console.log("getTelegramUserId: Telegram API доступен.");
+      resolve(window.Telegram.WebApp.initData.user?.id);
+    } else {
+      console.log("getTelegramUserId: Telegram API не готов, ожидаем...");
+      const intervalId = setInterval(() => {
+        if (window.Telegram.WebApp) {
+          console.log("getTelegramUserId: Telegram API готов!");
+          clearInterval(intervalId);
+          resolve(window.Telegram.WebApp.initData.user?.id);
+        }
+      }, 100);
     }
   });
+}
 
-  function showError(errorMessage) {
-    const errorDiv = document.createElement("div");
-    errorDiv.textContent = errorMessage;
-    errorDiv.style.cssText = 
-      "position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 0, 0, 0.8); color: white; display: flex; justify-content: center; align-items: center; font-size: 24px; z-index: 1000;";
-    document.body.appendChild(errorDiv);
+async function addUserToFirestore(userId) {
+  try {
+    console.log("addUserToFirestore: Начинаем добавление пользователя...", userId);
+    const userRef = db.collection('users').doc(userId);
+
+    const userDoc = await userRef.get();
+    console.log("addUserToFirestore: Проверка существования пользователя...", userDoc.exists);
+
+    if (!userDoc.exists) {
+      await userRef.set({
+        balance: 0,
+        // ... другие начальные данные ...
+      });
+      console.log('addUserToFirestore: Пользователь успешно добавлен в Firestore!', userId);
+    } else {
+      console.log('addUserToFirestore: Пользователь уже существует в Firestore.', userId);
+      // ... логика, если пользователь уже существует ...
+    }
+  } catch (error) {
+    console.error('addUserToFirestore: Ошибка при добавлении пользователя в Firestore:', error);
+    // Обработка ошибки
+    // Например, показать пользователю сообщение об ошибке
+    alert("Произошла ошибка. Пожалуйста, попробуйте позже.");
   }
-  // ... (ваш код для инициализации Firebase из firebase_config.js) ..
-  
+}
+
